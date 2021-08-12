@@ -49,4 +49,4 @@ jobs:
           deploymentMode: Incremental
           failOnStdErr: true 
 
-      - run: echo ${{ steps.storageAccountDeploy.output.BlobUri}}         
+      - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri}}         
