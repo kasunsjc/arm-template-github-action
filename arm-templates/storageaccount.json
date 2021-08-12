@@ -1,0 +1,53 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "The location of the resource group to deploy the resources to."
+            },
+            "defaultValue": "southeastasia"
+        },
+        "resourceGroupName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the resource group to deploy the resources to."
+            },
+            "defaultValue": "rg-armtemplate-github"
+        },
+        "sku": {
+            "type": "string",
+            "metadata": {
+                "description": "The SKU of the Storage Account to deploy the resources to."
+            },
+            "defaultValue": "Standard_LRS"
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "The name of the storage account to deploy the resources to."
+            },
+            "defaultValue": "kasunsadeployed"
+        }
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2019-06-01",
+            "tags": {
+                "displayName": "storageaccount1"
+            },
+            "location": "[parameters('location')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "[parameters('sku')]",
+                "tier": "Standard"
+            }
+        }
+    ],
+    "outputs": {}
+}
