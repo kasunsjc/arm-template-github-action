@@ -35,6 +35,7 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
+          region: southeast asia
           resourceGroup: rg-armtemplate-github
           subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
           template: ./arm-templates/storageaccount.json
