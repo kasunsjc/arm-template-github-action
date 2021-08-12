@@ -27,12 +27,16 @@ jobs:
           subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
           region: southeast asia
           template: ./arm-templates/arm-resourcegroup.json
+          parameters: 
+            location="Southeast Asia"
+            resourceGroupName="rg-armtemplate-github"
           deploymentName: arm-resourcegroup
           deploymentMode: Incremental
           failOnStdErr: true
 
       - name: Deploy Storage Account to resource group
         uses: Azure/arm-deploy@v1
+        id: storageAccountDeploy
         with:
           region: southeast asia
           resourceGroupName: rg-armtemplate-github
@@ -43,4 +47,6 @@ jobs:
             storageAccountName="kasunnewsa"
           deploymentName: arm-storageaccount
           deploymentMode: Incremental
-          failOnStdErr: true          
+          failOnStdErr: true 
+
+      - run: echo ${{ steps.storageAccountDeploy.output.BlobUri}}         
