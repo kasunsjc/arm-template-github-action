@@ -18,7 +18,7 @@ jobs:
     env:
       resource_group_name: rg-stg-armtemplate-github
       location: "Southeast Asia"
-    enviornment:
+    environment:
       name: Staging
 
     steps:
@@ -77,7 +77,7 @@ jobs:
     env:
       resource_group_name: rg-prod-armtemplate-github
       location: "Southeast Asia"
-    enviornment:
+    environment:
       name: Production
     
       needs: armDeployStaging
