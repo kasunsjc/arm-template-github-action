@@ -3,6 +3,9 @@
 name: armDeployment
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
@@ -16,3 +19,9 @@ jobs:
         uses: Azure/login@v1
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Azure CLI ARM Deployment
+        uses: Azure/cli@1.0.4
+        with:
+          inlinescript: |
+            az deployment sub create --location "southeast asia" --template-file ./arm-templates/arm-resourcegroup.json
