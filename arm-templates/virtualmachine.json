@@ -13,7 +13,7 @@
     "variables": {},
     "resources": [
         {
-            "name": "[toLower('ubuntuVM1storage')]",
+            "name": "[toLower('ubuntuVM1storagekasun')]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
             "location": "[resourceGroup().location]",
