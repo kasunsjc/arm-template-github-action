@@ -8,9 +8,18 @@ on:
       - main
   workflow_dispatch:
 
+env:
+  subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
+
 jobs:
-  armDeploy:
+  armDeployStaging:
+    name: Deploy to Stagging
     runs-on: ubuntu-latest
+    env:
+      resource_group_name: rg-stg-armtemplate-github
+      location: "Southeast Asia"
+    enviornment:
+      name: Staging
 
     steps:
       - uses: actions/checkout@v1
@@ -24,12 +33,12 @@ jobs:
         uses: Azure/arm-deploy@v1
         with:
           scope: subscription
-          subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
-          region: southeast asia
+          region: ${{ env.location }}
+          subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/arm-resourcegroup.json
           parameters: 
-            location="Southeast Asia"
-            resourceGroupName="rg-armtemplate-github"
+            location="${{ env.location }}"
+            resourceGroupName="${{ env.resource_group_name}}"
           deploymentName: arm-resourcegroup
           deploymentMode: Incremental
           failOnStdErr: true
@@ -38,9 +47,9 @@ jobs:
         uses: Azure/arm-deploy@v1
         id: storageAccountDeploy
         with:
-          region: southeast asia
-          resourceGroupName: rg-armtemplate-github
-          subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
+          region: ${{ env.location }}
+          resourceGroupName: ${{ env.resource_group_name}}
+          subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/storageaccount.json
           parameters: 
             ./arm-templates/storageaccount.parameters.json
@@ -52,12 +61,73 @@ jobs:
       - name: Deploy Virtual Machine to resource group
         uses: Azure/arm-deploy@v1
         with:
-          region: southeast asia
-          resourceGroupName: rg-armtemplate-github
-          subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
+          region: ${{ env.location }}
+          resourceGroupName: ${{ env.resource_group_name}}
+          subscriptionId: ${{ env.subscriptionId }}
           template: ./arm-templates/virtualmachine.json
           parameters:
             adminPassword=${{ secrets.VM_ADMIN_PASSWORD}}
+          deploymentName: arm-vmdeploy
+          deploymentMode: Incremental
+          failOnStdErr: true     
+          
+  armDeployProduction:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    env:
+      resource_group_name: rg-prod-armtemplate-github
+      location: "Southeast Asia"
+    enviornment:
+      name: Production
+    
+      needs: armDeployStaging
+
+    steps:
+      - uses: actions/checkout@v1
+
+      - name: Azure Login
+        uses: Azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Deploy Azure Resource Manager (ARM) Template
+        uses: Azure/arm-deploy@v1
+        with:
+          scope: subscription
+          region: ${{ env.location }}
+          subscriptionId: ${{ env.subscriptionId }}
+          template: ./arm-templates/arm-resourcegroup.json
+          parameters: 
+            location="${{ env.location }}"
+            resourceGroupName="${{ env.resource_group_name}}"
+          deploymentName: arm-resourcegroup
+          deploymentMode: Incremental
+          failOnStdErr: true
+
+      - name: Deploy Storage Account to resource group
+        uses: Azure/arm-deploy@v1
+        id: storageAccountDeploy
+        with:
+          region: ${{ env.location }}
+          resourceGroupName: ${{ env.resource_group_name}}
+          subscriptionId: ${{ env.subscriptionId }}
+          template: ./arm-templates/storageaccount.json
+          parameters: 
+            ./arm-templates/storageaccount.parameters.json
+            storageAccountName="kasunnewsaprod"
           deploymentName: arm-storageaccount
           deploymentMode: Incremental
-          failOnStdErr: true      
+          failOnStdErr: true  
+      
+      - name: Deploy Virtual Machine to resource group
+        uses: Azure/arm-deploy@v1
+        with:
+          region: ${{ env.location }}
+          resourceGroupName: ${{ env.resource_group_name}}
+          subscriptionId: ${{ env.subscriptionId }}
+          template: ./arm-templates/virtualmachine.json
+          parameters:
+            adminPassword=${{ secrets.VM_ADMIN_PASSWORD}}
+          deploymentName: arm-vmdeploy
+          deploymentMode: Incremental
+          failOnStdErr: true     
