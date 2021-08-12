@@ -80,7 +80,7 @@ jobs:
     environment:
       name: Production
     
-      needs: armDeployStaging
+    needs: armDeployStaging
 
     steps:
       - uses: actions/checkout@v1
