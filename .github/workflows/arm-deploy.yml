@@ -57,7 +57,7 @@ jobs:
           subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
           template: ./arm-templates/virtualmachine.json
           parameters: 
-            adminPassword=${{ secret.VM_ADMIN_PASSWORD}}
+            adminPassword="${{ secret.VM_ADMIN_PASSWORD}}"
           deploymentName: arm-storageaccount
           deploymentMode: Incremental
           failOnStdErr: true      
