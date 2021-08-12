@@ -38,7 +38,9 @@ jobs:
           resourceGroupName: rg-armtemplate-github
           subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
           template: ./arm-templates/storageaccount.json
-          parameters: ./arm-templates/storageaccount.parameters.json
+          parameters: 
+            ./arm-templates/storageaccount.parameters.json
+            storageAccountName="kasunnewsa"
           deploymentName: arm-storageaccount
           deploymentMode: Incremental
           failOnStdErr: true          
