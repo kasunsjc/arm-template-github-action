@@ -67,6 +67,7 @@ jobs:
           template: ./arm-templates/virtualmachine.json
           parameters:
             adminPassword=${{ secrets.VM_ADMIN_PASSWORD}}
+            storageAccountName="kasunstagesa"
           deploymentName: arm-vmdeploy
           deploymentMode: Incremental
           failOnStdErr: true     
@@ -128,6 +129,7 @@ jobs:
           template: ./arm-templates/virtualmachine.json
           parameters:
             adminPassword=${{ secrets.VM_ADMIN_PASSWORD}}
+            storageAccountName="kasunprodsa"
           deploymentName: arm-vmdeploy
           deploymentMode: Incremental
           failOnStdErr: true     

@@ -7,13 +7,19 @@
             "metadata": {
                 "description": "Enter the Password for the virtual machine"
             }
+        },
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Storage Account Name for the virtual machine"
+            }
         }
     },
     "functions": [],
     "variables": {},
     "resources": [
         {
-            "name": "[toLower('ubuntuVM1storagekasun')]",
+            "name": "[toLower(parameters('storageAccountName'))]",
             "type": "Microsoft.Storage/storageAccounts",
             "apiVersion": "2019-06-01",
             "location": "[resourceGroup().location]",
@@ -166,7 +172,7 @@
                 "diagnosticsProfile": {
                     "bootDiagnostics": {
                         "enabled": true,
-                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower('ubuntuVM1storagekasun'))).primaryEndpoints.blob]"
+                        "storageUri": "[reference(resourceId('Microsoft.Storage/storageAccounts/', toLower(parameters('storageAccountName')))).primaryEndpoints.blob]"
                     }
                 }
             }
