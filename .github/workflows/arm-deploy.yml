@@ -47,6 +47,17 @@ jobs:
             storageAccountName="kasunnewsa"
           deploymentName: arm-storageaccount
           deploymentMode: Incremental
-          failOnStdErr: true 
-
-      - run: echo ${{ steps.storageAccountDeploy.outputs.BlobUri}}         
+          failOnStdErr: true  
+      
+      - name: Deploy Virtual Machine to resource group
+        uses: Azure/arm-deploy@v1
+        with:
+          region: southeast asia
+          resourceGroupName: rg-armtemplate-github
+          subscriptionId: 43b3f2ee-7c26-4ac9-b907-0fd7ce508380
+          template: ./arm-templates/virtualmachine.json
+          parameters: 
+            adminPassword="kasunraj@1990"
+          deploymentName: arm-storageaccount
+          deploymentMode: Incremental
+          failOnStdErr: true      
